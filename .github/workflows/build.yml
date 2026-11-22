@@ -1,12 +1,4 @@
-name: Build APK
-on:
-  workflow_dispatch:
-  push:
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+- uses: actions/checkout@v4
       - run: unzip -q LiveRecorder.zip
       - uses: actions/setup-java@v4
         with:
@@ -27,9 +19,10 @@ jobs:
         with:
           gradle-version: "8.9"
       - name: Build
-        working-directory: LiveRecorder
-        run: ./gradlew assembleDebug --no-daemon
+        run: |
+          chmod +x ./gradlew || true
+          ./gradlew assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: LiveRecorder-apk
-          path: LiveRecorder/app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
